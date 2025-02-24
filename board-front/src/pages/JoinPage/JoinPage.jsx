@@ -2,12 +2,13 @@
 import * as s from './style';
 import React, { useState } from 'react';
 import { SiGoogle, SiKakao, SiNaver } from "react-icons/si";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import ValidInput from '../../components/auth/ValidInput/ValidInput';
 import { useInputValid } from '../../hooks/validInputHook';
 import { useJoinMutation } from '../../mutations/authMutation';
 
 function JoinPage(props) {
+    const navigate = useNavigate();
 
     const joinMutation = useJoinMutation();
 
@@ -55,15 +56,26 @@ function JoinPage(props) {
        }
        
     
-       joinMutation.mutate({
+       joinMutation.mutateAsync({
             username: inputValue.username,
             email: inputValue.email,
             password: inputValue.password,
+        }).then(response => {
+            console.log(response);
+            alert("가입해 주셔서 감사합니다.")
+            navigate(`/auth/login?username=${response.data.username}`)
+        }).catch(error => {
+            if(error.status === 400) {
+                setInputValidError(prev => ({
+                    ...prev,
+                    username: true,
+                }));
+            }
         });
 
-        if(joinMutation.isError) {
-            console.log(joinMutation.error);
-        }
+        
+        
+        
     };
 
     return (

@@ -14,12 +14,12 @@ import java.util.Date;
 @NoArgsConstructor
 public class User {
     private int userId;
-    private String userName;
+    private String username;
     private String password;
     private String email;
     private String nickname;
-    private String oauth2Name;
-    private String oauth2Provider;
+    private String oAuth2Name;
+    private String oAuth2Provider;
     private int accountExpired;
     private int accountLocked;
     private int credentialsExpired;
