@@ -1,6 +1,6 @@
 /**@jsxImportSource @emotion/react */
 import * as s from './style';
-import React from 'react';
+import React, { useState } from 'react';
 import { SiGoogle, SiKakao, SiNaver } from "react-icons/si";
 import { Link } from 'react-router-dom';
 import ValidInput from '../../components/auth/ValidInput/ValidInput';
@@ -11,39 +11,41 @@ function JoinPage(props) {
 
     const joinMutation = useJoinMutation();
 
-    const usernameInputData = useInputValid({
-        regexp: /^[a-zA-Z0-9_-]{3,15}$/,
-        errorText: "사용할 수 없는 사용자 이름입니다."
+    const [ inputValue, setInputValue ] = useState({
+        username: "",
+        email: "",
+        password: "",
+        passwordCheck: "",
     });
 
-    const emailInputData = useInputValid({
-        regexp: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-        errorText: "사용할 수 없는 이메일 형식입니다."
+    const [ inputValidError, setInputValidError ] = useState({
+        username: false,
+        email: false,
+        password: false,
+        passwordCheck: false,
     });
 
-    const passwordInputData = useInputValid({
-        regexp: /^(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[a-z\d!@#$%^&*(),.?":{}|<>]{8,}$/,
-        errorText: "사용할 수 없는 비밀번호입니다."
-    });
-
-    const passwordCheckInputData = useInputValid({
-        regexp: new RegExp(`^${passwordInputData.value}$`),
-        errorText: "비밀번호가 일치하지 않습니다."
-    });
+    const handleInputOnChange = (e) => {
+        setInputValue(prev => ({
+            ...prev,
+            [e.target.name]: e.target.value,
+        }));
+    }
 
     const isErrors = () => {
-        const errors = [
-            !usernameInputData.value,
-            !emailInputData.value,
-            !passwordInputData.value,
-            !passwordCheckInputData.value,
-            !!usernameInputData.errorMessage,
-            !!emailInputData.errorMessage,
-            !!passwordInputData.errorMessage,
-            !!passwordCheckInputData.errorMessage,
-        ];
+        
+        const isEmpty = Object.values(inputValue).map(value => !!value).includes(false);
+        const isValid = Object.values(inputValidError).includes(true);
 
-        return errors.includes(true);
+        return isEmpty || isValid;
+    }
+
+    const handlePasswordOnFocus = () => {
+        setInputValue(prev => ({
+            ...prev,
+            password: "",
+            passwordCheck: "",
+        }))
     }
 
     const handleJoinOnClick = () => {
@@ -54,9 +56,9 @@ function JoinPage(props) {
        
     
        joinMutation.mutate({
-            username: usernameInputData.value,
-            email: emailInputData.value,
-            password: passwordInputData.value
+            username: inputValue.username,
+            email: inputValue.email,
+            password: inputValue.password,
         });
 
         if(joinMutation.isError) {
@@ -95,34 +97,38 @@ function JoinPage(props) {
                     
                     <div>
                         <ValidInput type={'text'} placeholder={'Enter your username...'}
-                        name={"username"}
-                        value={usernameInputData.value}
-                        onChange={usernameInputData.handleOnChange}
-                        onBlur={usernameInputData.handleOnBlur}
-                        errorMessage={usernameInputData.errorMessage} />
-
-                        <ValidInput type={'text'} placeholder={'email address...'} 
-                        name={"email"}
-                        value={emailInputData.value}
-                        onChange={emailInputData.handleOnChange}
-                        onBlur={emailInputData.handleOnBlur}
-                        errorMessage={emailInputData.errorMessage}
-                        />
-
-                        <ValidInput type={'password'} placeholder={'password...'} 
-                        name={"password"}
-                        value={passwordInputData.value}
-                        onChange={passwordInputData.handleOnChange}
-                        onBlur={passwordInputData.handleOnBlur}
-                        errorMessage={passwordInputData.errorMessage}
-                        />
-
+                            name={"username"}
+                            value={inputValue.username}
+                            regexp={/^[a-zA-Z0-9_-]{3,15}$/}
+                            errorMessage= { "사용할 수 없는 사용자 이름입니다."} 
+                            onChange={handleInputOnChange}
+                            inputValidError={inputValidError}
+                            setInputValidError={setInputValidError}/>
+                        <ValidInput type={'text'} placeholder={'email address...'}
+                            name={"email"}
+                            value={inputValue.email}
+                            regexp={/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/}
+                            errorMessage= { "사용할 수 없는 이메일입니다."} 
+                            onChange={handleInputOnChange}
+                            inputValidError={inputValidError}
+                            setInputValidError={setInputValidError}/>
+                        <ValidInput type={'password'} placeholder={'password...'}
+                            name={"password"}
+                            value={inputValue.password}
+                            regexp={/^(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[a-z\d!@#$%^&*(),.?":{}|<>]{8,}$/}
+                            errorMessage= { "사용할 수 없는 비밀번호입니다."} 
+                            onChange={handleInputOnChange}
+                            onFocus={handlePasswordOnFocus}
+                            inputValidError={inputValidError}
+                            setInputValidError={setInputValidError}/>
                         <ValidInput type={'password'} placeholder={'password check...'}
-                        name={"passwordCheck"}
-                        value={passwordCheckInputData.value}
-                        onChange={passwordCheckInputData.handleOnChange}
-                        onBlur={passwordCheckInputData.handleOnBlur}
-                        errorMessage={passwordCheckInputData.errorMessage} />
+                            name={"passwordCheck"}
+                            value={inputValue.passwordCheck}
+                            regexp={new RegExp(`^${inputValue.password}$`)}
+                            errorMessage= { "비밀번호가 일치하지 않습니다."} 
+                            onChange={handleInputOnChange}
+                            inputValidError={inputValidError}
+                            setInputValidError={setInputValidError}/>    
                     
                         <p css={s.accountMessage}>
                             계정이 있으신가요? <Link to={"/auth/login"}>로그인</Link>

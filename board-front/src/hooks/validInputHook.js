@@ -7,7 +7,6 @@ export const useInputValid = ({ regexp, errorText }) => {
 
     const handleOnChange = (e) => {
         setName(e.target.name);
-        console.log(e.target.name);
         setValue(e.target.value); 
     }
 
