@@ -3,8 +3,13 @@ import * as s from './style';
 import React from 'react';
 import { SiGoogle, SiKakao, SiNaver } from "react-icons/si";
 import { Link } from 'react-router-dom';
+import ValidInput from '../../components/auth/ValidInput/ValidInput';
 
 function JoinPage(props) {
+    const handleJoinOnClick = () => {
+        
+    };
+
     return (
         <div css={s.layout}>
             <div>
@@ -35,24 +40,17 @@ function JoinPage(props) {
                     </div>
                     
                     <div>
-                        <div css={s.groupBox}>
-                            <input css={s.textInput} type="text" placeholder='Enter your email address...' />
-                        </div>
-                        <div css={s.groupBox}>
-                            <input css={s.textInput} type="password" placeholder='password...' />
-                        </div>
-                        <div css={s.groupBox}>
-                            <input css={s.textInput} type="password" placeholder='password check' />
-                        </div>
-                        <div css={s.groupBox}>
-                            <input css={s.textInput} type="text" placeholder='nickname' />
-                        </div>
+                        <ValidInput type={'text'} placeholder={'Enter your username...'} errorMessage={"사용자 이름을 사용할 수 없습니다."} />
+                        <ValidInput type={'text'} placeholder={'email address...'} />
+                        <ValidInput type={'text'} placeholder={'password...'} />
+                        <ValidInput type={'text'} placeholder={'password check...'} />
+                        
                         <p css={s.accountMessage}>
                             계정이 있으신가요? <Link to={"/auth/login"}>로그인</Link>
                         </p>
                     </div>
                     <div css={s.groupBox}>
-                        <button css={s.accountButton}>Signup</button>
+                        <button css={s.accountButton} onClick={handleJoinOnClick}>Join</button>
                     </div>
                 </main>
             </div>
