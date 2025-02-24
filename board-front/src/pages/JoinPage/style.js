@@ -29,6 +29,11 @@ export const accountMessage = css`
     color: #777777;
     cursor: default;
 `;
+export const groupBox = css`
+    box-sizing: border-box;
+    padding: 0.6rem 0;
+    width: 32.6rem;
+`;
 
 export const accountButton = css`
     box-sizing: border-box;

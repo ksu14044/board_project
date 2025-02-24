@@ -4,10 +4,64 @@ import React from 'react';
 import { SiGoogle, SiKakao, SiNaver } from "react-icons/si";
 import { Link } from 'react-router-dom';
 import ValidInput from '../../components/auth/ValidInput/ValidInput';
+import { useInputValid } from '../../hooks/validInputHook';
+import { useJoinMutation } from '../../mutations/authMutation';
 
 function JoinPage(props) {
+
+    const joinMutation = useJoinMutation();
+
+    const usernameInputData = useInputValid({
+        regexp: /^[a-zA-Z0-9_-]{3,15}$/,
+        errorText: "사용할 수 없는 사용자 이름입니다."
+    });
+
+    const emailInputData = useInputValid({
+        regexp: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+        errorText: "사용할 수 없는 이메일 형식입니다."
+    });
+
+    const passwordInputData = useInputValid({
+        regexp: /^(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[a-z\d!@#$%^&*(),.?":{}|<>]{8,}$/,
+        errorText: "사용할 수 없는 비밀번호입니다."
+    });
+
+    const passwordCheckInputData = useInputValid({
+        regexp: new RegExp(`^${passwordInputData.value}$`),
+        errorText: "비밀번호가 일치하지 않습니다."
+    });
+
+    const isErrors = () => {
+        const errors = [
+            !usernameInputData.value,
+            !emailInputData.value,
+            !passwordInputData.value,
+            !passwordCheckInputData.value,
+            !!usernameInputData.errorMessage,
+            !!emailInputData.errorMessage,
+            !!passwordInputData.errorMessage,
+            !!passwordCheckInputData.errorMessage,
+        ];
+
+        return errors.includes(true);
+    }
+
     const handleJoinOnClick = () => {
-        
+       if(isErrors()) {
+            alert("가입 정보를 다시 확인해주세요.");
+            return;
+       }
+       
+    
+       joinMutation.mutate({
+            username: usernameInputData.value,
+            email: emailInputData.value,
+            password: passwordInputData.value
+        });
+
+        if(joinMutation.isError) {
+            console.log(joinMutation.error);
+        }
     };
 
     return (
@@ -40,11 +94,36 @@ function JoinPage(props) {
                     </div>
                     
                     <div>
-                        <ValidInput type={'text'} placeholder={'Enter your username...'} errorMessage={"사용자 이름을 사용할 수 없습니다."} />
-                        <ValidInput type={'text'} placeholder={'email address...'} />
-                        <ValidInput type={'text'} placeholder={'password...'} />
-                        <ValidInput type={'text'} placeholder={'password check...'} />
-                        
+                        <ValidInput type={'text'} placeholder={'Enter your username...'}
+                        name={"username"}
+                        value={usernameInputData.value}
+                        onChange={usernameInputData.handleOnChange}
+                        onBlur={usernameInputData.handleOnBlur}
+                        errorMessage={usernameInputData.errorMessage} />
+
+                        <ValidInput type={'text'} placeholder={'email address...'} 
+                        name={"email"}
+                        value={emailInputData.value}
+                        onChange={emailInputData.handleOnChange}
+                        onBlur={emailInputData.handleOnBlur}
+                        errorMessage={emailInputData.errorMessage}
+                        />
+
+                        <ValidInput type={'password'} placeholder={'password...'} 
+                        name={"password"}
+                        value={passwordInputData.value}
+                        onChange={passwordInputData.handleOnChange}
+                        onBlur={passwordInputData.handleOnBlur}
+                        errorMessage={passwordInputData.errorMessage}
+                        />
+
+                        <ValidInput type={'password'} placeholder={'password check...'}
+                        name={"passwordCheck"}
+                        value={passwordCheckInputData.value}
+                        onChange={passwordCheckInputData.handleOnChange}
+                        onBlur={passwordCheckInputData.handleOnBlur}
+                        errorMessage={passwordCheckInputData.errorMessage} />
+                    
                         <p css={s.accountMessage}>
                             계정이 있으신가요? <Link to={"/auth/login"}>로그인</Link>
                         </p>
