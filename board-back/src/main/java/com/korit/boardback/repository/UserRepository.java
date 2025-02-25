@@ -23,7 +23,4 @@ public class UserRepository {
         return user;
     }
 
-    public Optional<User> login(String username, String password) {
-        return Optional.ofNullable(userMapper.login(username, password));
-    }
 }

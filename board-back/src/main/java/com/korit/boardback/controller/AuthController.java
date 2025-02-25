@@ -27,8 +27,14 @@ public class AuthController {
 
     @Operation(summary = "로그인", description = "로그인 설명")
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody ReqLoginDto reqLoginDto) throws NotFoundException {
-        System.out.println(ResponseEntity.ok().body(userService.login(reqLoginDto)));
+    public ResponseEntity<?> login(@RequestBody ReqLoginDto reqLoginDto) {
+        /**
+         * UserService => login()
+         * User객체 findByUsername
+         * user가 있으면 비밀번호 일치하는지 확인
+         * 비밀번호가 일치하면 JWT 응답
+         * JwtUtil -> secret 세팅
+         */
         return ResponseEntity.ok().body(userService.login(reqLoginDto));
     }
 }
