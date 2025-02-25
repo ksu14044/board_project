@@ -2,11 +2,14 @@
 import * as s from './style';
 import React, { useState } from 'react';
 import { SiGoogle, SiKakao, SiNaver } from "react-icons/si";
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import ValidInput from '../../components/auth/ValidInput/ValidInput';
 import { useLoginMutation } from '../../mutations/authMutation';
+import Swal from 'sweetalert2';
+import { setTokenLocalStorage } from '../../configs/axiosConfig';
 
 function LoginPage(props) {
+    const navigate = useNavigate();
     const loginMutation = useLoginMutation();
     const [ searchParams, setSearchParams ] = useSearchParams();
    
@@ -35,31 +38,32 @@ function LoginPage(props) {
         return isEmpty || isValid;
     }
 
-    const handleLoginOnClick = () => {
-        if(isErrors()) {
-            alert("회원 정보를 다시 입력하세요.")
-            return;
-        }
-
-        loginMutation.mutateAsync({
-            username: inputValue.username,
-            password: inputValue.password,
-        }).then(response => {
+    const handleLoginOnclick = async () => {
+        try {
+            const response = await loginMutation.mutateAsync(inputValue);
+            const tokenName = response.data.name;
+            const accessToken = response.data.token;
+            setTokenLocalStorage(tokenName, accessToken);
             console.log(response);
-            
-            alert("로그인 성공 제발")
-        }).catch(error => {
-            if(error.status == 400) {
-                
-                setInputValidError(prev => ({
-                    ...prev,
-                    username: true,
-                }))
-            }
-            if(error.status == 500) {
-                alert("사용자를 찾을 수 없습니다.")
-            }
-        })
+            await Swal.fire({
+                icon: "success",
+                text: "로그인 성공",
+                timer: 1000,
+                position: "center",
+                showConfirmButton: false,
+              });
+            navigate("/");
+
+        } catch (error) {
+            console.log(error);
+            Swal.fire({
+                title: '로그인 실패',
+                text: '사용자 정보를 다시 입력하세요.',
+                icon: 'error',
+                confirmButtonText: "확인",
+                confirmButtonColor: "#e23323"
+              })
+        }
     }
 
 
@@ -119,7 +123,7 @@ function LoginPage(props) {
                         </p>
                     </div>
                     <div css={s.groupBox}>
-                        <button css={s.accountButton} onClick={handleLoginOnClick}>Login</button>
+                        <button css={s.accountButton} onClick={handleLoginOnclick}>Login</button>
                     </div>
                 </main>
                 <footer>

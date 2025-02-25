@@ -2,6 +2,7 @@ package com.korit.boardback.controller;
 
 import com.korit.boardback.dto.request.ReqJoinDto;
 import com.korit.boardback.dto.request.ReqLoginDto;
+import com.korit.boardback.dto.response.RespTokenDto;
 import com.korit.boardback.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.apache.ibatis.javassist.NotFoundException;
@@ -35,6 +36,15 @@ public class AuthController {
          * 비밀번호가 일치하면 JWT 응답
          * JwtUtil -> secret 세팅
          */
-        return ResponseEntity.ok().body(userService.login(reqLoginDto));
+        System.out.println(reqLoginDto);
+        RespTokenDto respTokenDto = RespTokenDto.builder()
+                .type("JWT")
+                .name("AccessToken")
+                .token(userService.login(reqLoginDto))
+                .build();
+
+        return ResponseEntity.ok().body(respTokenDto);
     }
+
+
 }
