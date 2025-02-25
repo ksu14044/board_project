@@ -1,11 +1,13 @@
 package com.korit.boardback.service;
 
 import com.korit.boardback.dto.request.ReqJoinDto;
+import com.korit.boardback.dto.request.ReqLoginDto;
 import com.korit.boardback.entity.User;
 import com.korit.boardback.exception.DuplicatedValueException;
 import com.korit.boardback.exception.FieldError;
 import com.korit.boardback.repository.UserRepository;
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,6 +44,9 @@ public class UserService {
                 .build();
 
        return  userRepository.save(user);
+    }
 
+    public User login(ReqLoginDto reqLoginDto) throws NotFoundException {
+        return userRepository.login(reqLoginDto.getUsername(), reqLoginDto.getPassword()).orElseThrow(() -> new NotFoundException("사용자를 찾을 수 없습니다."));
     }
 }

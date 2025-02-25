@@ -37,6 +37,7 @@
         where
             username = #{username}
     </select>
+
     <insert id="insert" useGeneratedKeys="true" keyProperty="userId">
         insert into user_tb
         values (
@@ -54,4 +55,15 @@
         now()
         )
     </insert>
+
+    <select id="login" resultMap="userResultMap">
+        select
+            *
+        from
+            user_tb
+        where
+            username = #{username}
+        and
+            password = #{password}
+    </select>
 </mapper>

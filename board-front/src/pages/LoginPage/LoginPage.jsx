@@ -1,10 +1,69 @@
 /**@jsxImportSource @emotion/react */
 import * as s from './style';
-import React from 'react';
+import React, { useState } from 'react';
 import { SiGoogle, SiKakao, SiNaver } from "react-icons/si";
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
+import ValidInput from '../../components/auth/ValidInput/ValidInput';
+import { useLoginMutation } from '../../mutations/authMutation';
 
 function LoginPage(props) {
+    const loginMutation = useLoginMutation();
+    const [ searchParams, setSearchParams ] = useSearchParams();
+   
+    const [ inputValue, setInputValue ] = useState({
+        username: searchParams.get("username"),
+        password: "",
+    });
+    
+    const handleInputOnChange = (e) => {
+        setInputValue({
+            ...inputValue,
+            [e.target.name]: e.target.value,
+        })
+    }
+    const [ inputValidError, setInputValidError ] = useState({
+        username: false,
+        password: false,
+    })
+
+    const isErrors = () => {
+
+        const isEmpty = Object.values(inputValue).map(value => !!value).includes(false);
+        const isValid = Object.values(inputValidError).includes(true);
+        console.log(isEmpty);
+        console.log(isValid);
+        return isEmpty || isValid;
+    }
+
+    const handleLoginOnClick = () => {
+        if(isErrors()) {
+            alert("회원 정보를 다시 입력하세요.")
+            return;
+        }
+
+        loginMutation.mutateAsync({
+            username: inputValue.username,
+            password: inputValue.password,
+        }).then(response => {
+            console.log(response);
+            
+            alert("로그인 성공 제발")
+        }).catch(error => {
+            if(error.status == 400) {
+                
+                setInputValidError(prev => ({
+                    ...prev,
+                    username: true,
+                }))
+            }
+            if(error.status == 500) {
+                alert("사용자를 찾을 수 없습니다.")
+            }
+        })
+    }
+
+
+
     return (
         <div css={s.layout}>
             <div>
@@ -35,18 +94,32 @@ function LoginPage(props) {
                     </div>
                     
                     <div>
-                        <div css={s.groupBox}>
-                            <input css={s.textInput} type="text" placeholder='Enter your email address...' />
-                        </div>
-                        <div css={s.groupBox}>
-                            <input css={s.textInput} type="password" placeholder='password...' />
-                        </div>
+                       
+                        <ValidInput type={"text"} placeholder={"Enter your username..."}
+                            name={"username"}
+                            value={inputValue.username}
+                            regexp={/^[a-zA-Z0-9_-]{3,15}$/}
+                            errorMessage= { "사용할 수 없는 사용자 이름입니다."}
+                            onChange={handleInputOnChange}
+                            inputValidError={inputValidError}
+                            setInputValidError={setInputValidError}
+                        />
+                        <ValidInput type={"password"} placeholder={"password..."}
+                            name={"password"}
+                            value={inputValue.password}
+                            regexp={/^(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[a-z\d!@#$%^&*(),.?":{}|<>]{8,}$/}
+                            errorMessage= { "사용할 수 없는 비밀번호입니다."}
+                            onChange={handleInputOnChange}
+                            inputValidError={inputValidError}
+                            setInputValidError={setInputValidError}
+                        />
+                    
                         <p css={s.accountMessage}>
                             계정이 없으신다면 지금 가입하세요. <Link to={"/auth/join"}>회원가입</Link>
                         </p>
                     </div>
                     <div css={s.groupBox}>
-                        <button css={s.accountButton}>Login</button>
+                        <button css={s.accountButton} onClick={handleLoginOnClick}>Login</button>
                     </div>
                 </main>
                 <footer>
