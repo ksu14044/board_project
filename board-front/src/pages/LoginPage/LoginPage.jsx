@@ -7,14 +7,17 @@ import ValidInput from '../../components/auth/ValidInput/ValidInput';
 import { useLoginMutation } from '../../mutations/authMutation';
 import Swal from 'sweetalert2';
 import { setTokenLocalStorage } from '../../configs/axiosConfig';
+import { useuserMeQuery } from '../../queries/userQuery';
 
 function LoginPage(props) {
     const navigate = useNavigate();
     const loginMutation = useLoginMutation();
+    const loginUser = useuserMeQuery();
+
     const [ searchParams, setSearchParams ] = useSearchParams();
    
     const [ inputValue, setInputValue ] = useState({
-        username: searchParams.get("username"),
+        username: searchParams.get("username") || "",
         password: "",
     });
     
@@ -29,15 +32,6 @@ function LoginPage(props) {
         password: false,
     })
 
-    const isErrors = () => {
-
-        const isEmpty = Object.values(inputValue).map(value => !!value).includes(false);
-        const isValid = Object.values(inputValidError).includes(true);
-        console.log(isEmpty);
-        console.log(isValid);
-        return isEmpty || isValid;
-    }
-
     const handleLoginOnclick = async () => {
         try {
             const response = await loginMutation.mutateAsync(inputValue);
@@ -51,7 +45,8 @@ function LoginPage(props) {
                 timer: 1000,
                 position: "center",
                 showConfirmButton: false,
-              });
+            });
+            loginUser.refetch();
             navigate("/");
 
         } catch (error) {
@@ -65,8 +60,6 @@ function LoginPage(props) {
               })
         }
     }
-
-
 
     return (
         <div css={s.layout}>
