@@ -6,12 +6,15 @@ import { basicbutton, emptyButton } from '../../../styles/buttons';
 import { useRecoilState } from 'recoil';
 import { mainSidebarIsOpenState } from '../../../atoms/mainSidebar/mainSidebarAtom';
 import { LuLockKeyhole } from "react-icons/lu";
+import { useuserMeQuery } from '../../../queries/userQuery';
 
 
 function MainSidebar(props) {
 
     const [ isOpen, setOpen ] = useRecoilState(mainSidebarIsOpenState);
     
+    const loginUser = useuserMeQuery();
+
     const handleSidebarClose = () => {
         setOpen(false);
     }

@@ -3,9 +3,11 @@ package com.korit.boardback.service;
 import com.korit.boardback.dto.request.ReqJoinDto;
 import com.korit.boardback.dto.request.ReqLoginDto;
 import com.korit.boardback.entity.User;
+import com.korit.boardback.entity.UserRole;
 import com.korit.boardback.exception.DuplicatedValueException;
 import com.korit.boardback.exception.FieldError;
 import com.korit.boardback.repository.UserRepository;
+import com.korit.boardback.repository.UserRoleRepository;
 import com.korit.boardback.security.jwt.JwtUtil;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.apache.ibatis.javassist.NotFoundException;
@@ -28,6 +30,9 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UserRoleRepository userRoleRepository;
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -54,8 +59,14 @@ public class UserService {
                 .credentialsExpired(1)
                 .accountEnabled(1)
                 .build();
+        userRepository.save(user);
+        UserRole userRole = UserRole.builder()
+                .userId(user.getUserId())
+                .roleId(1)
+                .build();
+        userRoleRepository.save(userRole);
 
-       return  userRepository.save(user);
+       return  user;
     }
 
     public String login(ReqLoginDto reqLoginDto) {

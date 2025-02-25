@@ -18,9 +18,14 @@ public class UserRepository {
         return Optional.ofNullable(userMapper.selectByUsername(username));
     }
 
+    public Optional<User> findById(int userId) {
+        return Optional.ofNullable(userMapper.selectById(userId));
+    }
+
     public User save(User user) {
         userMapper.insert(user);
         return user;
     }
+
 
 }
