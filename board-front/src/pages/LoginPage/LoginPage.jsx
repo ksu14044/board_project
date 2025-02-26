@@ -7,12 +7,13 @@ import ValidInput from '../../components/auth/ValidInput/ValidInput';
 import { useLoginMutation } from '../../mutations/authMutation';
 import Swal from 'sweetalert2';
 import { setTokenLocalStorage } from '../../configs/axiosConfig';
-import { useuserMeQuery } from '../../queries/userQuery';
+import { useUserMeQuery } from '../../queries/userQuery';
+
 
 function LoginPage(props) {
     const navigate = useNavigate();
     const loginMutation = useLoginMutation();
-    const loginUser = useuserMeQuery();
+    const loginUser = useUserMeQuery();
 
     const [ searchParams, setSearchParams ] = useSearchParams();
    

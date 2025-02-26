@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { getUserMeApi } from "../apis/userApi";
 
-export const useuserMeQuery = () => useQuery({
+export const useUserMeQuery = () => useQuery({
     queryKey: ["userMeQuery"],
     queryFn: getUserMeApi,
     staleTime: 1000 * 60 * 20, // 데이터가 fresh한 시간

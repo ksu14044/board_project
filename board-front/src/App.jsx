@@ -6,26 +6,27 @@ import MainSidebar from "./components/common/MainSidebar/MainSidebar"
 import LoginPage from "./pages/LoginPage/LoginPage"
 import { Route, Routes } from "react-router-dom"
 import JoinPage from "./pages/JoinPage/JoinPage"
-import { useuserMeQuery } from "./queries/userQuery"
+import AccountPage from "./pages/AccountPage/AccountPage"
+import { useUserMeQuery } from "./queries/userQuery"
 
 function App() {
 
-  const loginUser = useuserMeQuery();
+  const loginUser = useUserMeQuery();
   
   return (
     <>
       <Global styles={global}/>
       {
-       
-          <MainLayout>
-            <MainSidebar />
-            <MainContainer>
-              <Routes>
-                <Route path="/auth/login" element={<LoginPage />} />
-                <Route path="/auth/join" element={<JoinPage />} />
-              </Routes>
-            </MainContainer>
-          </MainLayout>
+        <MainLayout>
+          <MainSidebar />
+          <MainContainer>
+            <Routes>
+              <Route path="/account/setting" element={<AccountPage />} />
+              <Route path="/auth/login" element={<LoginPage />} />
+              <Route path="/auth/join" element={<JoinPage />} />
+            </Routes>
+          </MainContainer>
+        </MainLayout>
       }
       
     </>

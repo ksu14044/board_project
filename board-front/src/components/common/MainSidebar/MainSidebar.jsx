@@ -6,15 +6,15 @@ import { basicbutton, emptyButton } from '../../../styles/buttons';
 import { useRecoilState } from 'recoil';
 import { mainSidebarIsOpenState } from '../../../atoms/mainSidebar/mainSidebarAtom';
 import { LuLockKeyhole } from "react-icons/lu";
-import { useuserMeQuery } from '../../../queries/userQuery';
 import { useNavigate } from 'react-router-dom';
+import { useUserMeQuery } from '../../../queries/userQuery';
 
 
 function MainSidebar(props) {
     const navigate = useNavigate();
     const [ isOpen, setOpen ] = useRecoilState(mainSidebarIsOpenState);
     
-    const loginUser = useuserMeQuery();
+    const loginUser = useUserMeQuery();
 
     const handleSidebarClose = () => {
         setOpen(false);
@@ -23,7 +23,9 @@ function MainSidebar(props) {
     const handleLoginButtonOnClick = () => {
         navigate("/auth/login");
     }
-
+    const handleAccountButtonOnClick = () => {
+        navigate("/account/setting");
+    }
     return (
         <div css={s.layout(isOpen)}>
             <div css={s.container}>
@@ -39,9 +41,15 @@ function MainSidebar(props) {
                                     </span>
                                 </button>
                                 :
-                                <button css={emptyButton}>
+                                <button css={emptyButton} onClick={handleAccountButtonOnClick}>
                                     <span css={s.authText}>
-                                        <LuLockKeyhole />{loginUser.data?.data?.nickname}
+                                        <div css={s.profileImgBox}>
+                                            {
+                                                loginUser.isLoading ||
+                                                <img src={`http://localhost:8080/image/user/profile/${loginUser?.data?.data.profileImg}`} alt='' />
+                                            }
+                                        </div>
+                                        {loginUser.data?.data?.nickname}
                                     </span>
                                 </button>
                             }

@@ -27,5 +27,12 @@ public class UserRepository {
         return user;
     }
 
+    public void updateProfileImg(int userId, String profileImg) {
+        userMapper.updateProfileImgById(userId, profileImg);
+    }
+
+    public void updateNickname(int userId, String nickname) {
+        userMapper.updateNicknameById(userId, nickname);
+    }
 
 }
