@@ -1,5 +1,6 @@
 package com.korit.boardback.controller;
 
+import com.korit.boardback.dto.request.ReqAuthEmailDto;
 import com.korit.boardback.dto.request.ReqJoinDto;
 import com.korit.boardback.dto.request.ReqLoginDto;
 import com.korit.boardback.dto.response.RespTokenDto;
@@ -44,6 +45,12 @@ public class AuthController {
                 .build();
 
         return ResponseEntity.ok().body(respTokenDto);
+    }
+
+    @PostMapping("/email")
+    public ResponseEntity<?> sendAuthMail(@RequestBody ReqAuthEmailDto reqAuthEmailDto) {
+
+        return ResponseEntity.ok().build();
     }
 
 

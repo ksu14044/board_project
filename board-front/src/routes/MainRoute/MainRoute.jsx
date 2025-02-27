@@ -11,15 +11,17 @@ function MainRoute(props) {
     const navigate = useNavigate();
     // const loginUser = useUserMeQuery();
     const queryClient = useQueryClient();
+    const queryState = queryClient.getQueryState(["userMeQuery"]);
 
     useEffect(() => {
-        const queryData = queryClient.getQueryData(["userMeQuery"]);
-        if(!queryData) {
+        console.log(queryState);
+        
+        if(queryState.status === "error") {
             navigate("/auth/login");
         }
-    }, [queryClient]);
+    }, [queryState]);
 
-    return (
+    return  queryState.status === "success" &&
         <>
             <MainSidebar />
             <MainContainer>
@@ -28,8 +30,7 @@ function MainRoute(props) {
                     <Route path="/*" element={<NotFoundPage />} />
                 </Routes>
             </MainContainer>
-        </>   
-    );
+        </>
 }
 
 export default MainRoute;

@@ -10,24 +10,22 @@ function AuthRoute(props) {
     const navigate = useNavigate();
     // const loginUser = useUserMeQuery();
     const queryClient = useQueryClient();
+    const queryState = queryClient.getQueryState(["userMeQuery"]);
    
 
     useEffect(() => {
-       const queryData = queryClient.getQueryData(["userMeQuery"]);
-       if(!!queryData) {
+        console.log(queryState);
+        if(queryState.status === "success") {
             navigate("/");
-       }
-    }, [queryClient])
+        }
+    }, [queryState])
 
-    return (
-       
-        <Routes>
-            <Route path="/login" element={<LoginPage />}/>
-            <Route path="/join" element={<JoinPage />}/>
-            <Route path="/*" element={<NotFoundPage />} />
-        </Routes>
-          
-    );
+    return  queryState.status === "error" &&
+            <Routes>
+                <Route path="/login" element={<LoginPage />}/>
+                <Route path="/join" element={<JoinPage />}/>
+                <Route path="/*" element={<NotFoundPage />} />
+            </Routes>
 }
 
 export default AuthRoute;

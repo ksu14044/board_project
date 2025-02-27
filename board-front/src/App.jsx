@@ -7,21 +7,18 @@ import MainRoute from "./routes/MainRoute/MainRoute"
 import { useUserMeQuery } from "./queries/userQuery"
 
 function App() {
-  const loginUser = useUserMeQuery();
+  
+  useUserMeQuery();
 
   return (
     <>
       <Global styles={global}/>
-      {
-        loginUser.isFetched &&
         <MainLayout>
           <Routes>
             <Route path="/auth/*" element={<AuthRoute />} />
             <Route path="/*" element={<MainRoute />} />
           </Routes>
         </MainLayout>
-      }
-        
     </>
   )
 }

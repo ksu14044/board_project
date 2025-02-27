@@ -22,15 +22,13 @@ function MainSidebar(props) {
         setOpen(false);
     }
 
-
     const handleAccountButtonOnClick = () => {
         navigate("/account/setting");
     }
 
     const handleLogoutButtonOnClick = async () => {
         setTokenLocalStorage("AccessToken", null);
-        // await queryClient.invalidateQueries({queryKey: ["userMeQuery"]});
-        queryClient.removeQueries({queryKey: ["userMeQuery"]});
+        await queryClient.invalidateQueries({queryKey: ["userMeQuery"]});
         navigate("/auth/login");
     }
 
