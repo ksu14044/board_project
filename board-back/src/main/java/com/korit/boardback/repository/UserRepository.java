@@ -34,5 +34,8 @@ public class UserRepository {
     public void updateNickname(int userId, String nickname) {
         userMapper.updateNicknameById(userId, nickname);
     }
+    public void updatePassword(int userId, String password) {
+        userMapper.updatePasswordById(userId, password);
+    }
 
 }

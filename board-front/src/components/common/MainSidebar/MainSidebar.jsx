@@ -8,7 +8,7 @@ import { mainSidebarIsOpenState } from '../../../atoms/mainSidebar/mainSidebarAt
 import { LuLockKeyhole } from "react-icons/lu";
 import { useNavigate } from 'react-router-dom';
 import { useUserMeQuery } from '../../../queries/userQuery';
-
+import { BiLogOut } from "react-icons/bi";
 
 function MainSidebar(props) {
     const navigate = useNavigate();
@@ -29,33 +29,43 @@ function MainSidebar(props) {
     return (
         <div css={s.layout(isOpen)}>
             <div css={s.container}>
-                <div css={s.groupLayout}>
-                    <div css={s.topGroup}>
-                        <div css={s.user}>
-                            {
-                                loginUser.isError
-                                ?
-                                <button css={emptyButton} onClick={handleLoginButtonOnClick}>
-                                    <span css={s.authText}>
-                                        <LuLockKeyhole />로그인 후 이용하기
-                                    </span>
-                                </button>
-                                :
-                                <button css={emptyButton} onClick={handleAccountButtonOnClick}>
-                                    <span css={s.authText}>
-                                        <div css={s.profileImgBox}>
-                                            {
-                                                loginUser.isLoading ||
-                                                <img src={`http://localhost:8080/image/user/profile/${loginUser?.data?.data.profileImg}`} alt='' />
-                                            }
-                                        </div>
-                                        {loginUser.data?.data?.nickname}
-                                    </span>
-                                </button>
-                            }
-                           
+                <div>
+                    <div css={s.groupLayout}>
+                        <div css={s.topGroup}>
+                            <div css={s.user}>
+                                {
+                                    loginUser.isError
+                                    ?
+                                    <button css={emptyButton} onClick={handleLoginButtonOnClick}>
+                                        <span css={s.authText}>
+                                            <LuLockKeyhole />로그인 후 이용하기
+                                        </span>
+                                    </button>
+                                    :
+                                    <button css={emptyButton} onClick={handleAccountButtonOnClick}>
+                                        <span css={s.authText}>
+                                            <div css={s.profileImgBox}>
+                                                {
+                                                    loginUser.isLoading ||
+                                                    <img src={`http://localhost:8080/image/user/profile/${loginUser?.data?.data.profileImg}`} alt='' />
+                                                }
+                                            </div>
+                                            {loginUser.data?.data?.nickname}
+                                        </span>
+                                    </button>
+                                }
+                            </div>
+                            <button css={basicbutton} onClick={handleSidebarClose}><FiChevronsLeft /></button>
                         </div>
-                        <button css={basicbutton} onClick={handleSidebarClose}><FiChevronsLeft /></button>
+                    </div>
+                </div>
+                <div>
+                    <div css={s.groupLayout}>
+                        <button css={emptyButton}>
+                            <span css={s.authText}>
+                                <BiLogOut /> 로그아웃
+                            </span>
+                        </button>
                     </div>
                 </div>
             </div>

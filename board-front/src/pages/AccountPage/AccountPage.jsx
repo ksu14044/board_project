@@ -16,7 +16,7 @@ function AccountPage(props) {
     const [ passwordModalOpen, setPasswordModalOpen ] = useState(false); 
     
     useEffect(() => {
-        setNicknameValue(loginUser?.data?.data.nickname);
+        setNicknameValue(loginUser?.data?.data.nickname || "");
     }, [loginUser.isFetched]);
 
     const handleProfileImgFileOnChange = async (e) => {
@@ -96,8 +96,7 @@ function AccountPage(props) {
                         position: "static",
                         boxSizing: "border-box",
                         borderRadius: "1.5rem",
-                        width: "35rem",
-                        height: "35rem",
+                        width: "37rem",
                     }
                 }}
                 children={<PasswordModal setOpen={setPasswordModalOpen}/>}
