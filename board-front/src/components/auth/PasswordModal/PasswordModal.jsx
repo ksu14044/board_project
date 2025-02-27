@@ -58,7 +58,7 @@ function PasswordModal({ setOpen }) {
                     <label>Confirm your new password</label>
                     <input type="password" name='confirmPassword' value={passwordValue.confirmPassword} onChange={handlePasswordInputOnChange}/>
                 </div>
-                <button css={s.setButton} disabled={!passwordValue.newPassword || !passwordValue.confirmPassword} 
+                <button css={s.setButton} disabled={!passwordValue.newPassword || !passwordValue.confirmPassword || passwordValue.newPassword !== passwordValue.confirmPassword} 
                 onClick={handleSetButtonOnClick}>Set a password</button>
             </div>
         </div>

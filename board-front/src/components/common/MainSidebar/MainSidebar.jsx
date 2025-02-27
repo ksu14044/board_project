@@ -9,23 +9,31 @@ import { LuLockKeyhole } from "react-icons/lu";
 import { useNavigate } from 'react-router-dom';
 import { useUserMeQuery } from '../../../queries/userQuery';
 import { BiLogOut } from "react-icons/bi";
+import { setTokenLocalStorage } from '../../../configs/axiosConfig';
+import { useQueryClient } from '@tanstack/react-query';
 
 function MainSidebar(props) {
     const navigate = useNavigate();
     const [ isOpen, setOpen ] = useRecoilState(mainSidebarIsOpenState);
-    
-    const loginUser = useUserMeQuery();
+    const queryClient = useQueryClient();
+    const loginUserData = queryClient.getQueryData(["userMeQuery"]);
 
     const handleSidebarClose = () => {
         setOpen(false);
     }
 
-    const handleLoginButtonOnClick = () => {
-        navigate("/auth/login");
-    }
+
     const handleAccountButtonOnClick = () => {
         navigate("/account/setting");
     }
+
+    const handleLogoutButtonOnClick = async () => {
+        setTokenLocalStorage("AccessToken", null);
+        // await queryClient.invalidateQueries({queryKey: ["userMeQuery"]});
+        queryClient.removeQueries({queryKey: ["userMeQuery"]});
+        navigate("/auth/login");
+    }
+
     return (
         <div css={s.layout(isOpen)}>
             <div css={s.container}>
@@ -33,27 +41,14 @@ function MainSidebar(props) {
                     <div css={s.groupLayout}>
                         <div css={s.topGroup}>
                             <div css={s.user}>
-                                {
-                                    loginUser.isError
-                                    ?
-                                    <button css={emptyButton} onClick={handleLoginButtonOnClick}>
-                                        <span css={s.authText}>
-                                            <LuLockKeyhole />로그인 후 이용하기
-                                        </span>
-                                    </button>
-                                    :
-                                    <button css={emptyButton} onClick={handleAccountButtonOnClick}>
-                                        <span css={s.authText}>
-                                            <div css={s.profileImgBox}>
-                                                {
-                                                    loginUser.isLoading ||
-                                                    <img src={`http://localhost:8080/image/user/profile/${loginUser?.data?.data.profileImg}`} alt='' />
-                                                }
-                                            </div>
-                                            {loginUser.data?.data?.nickname}
-                                        </span>
-                                    </button>
-                                }
+                                <button css={emptyButton} onClick={handleAccountButtonOnClick}>
+                                    <span css={s.authText}>
+                                        <div css={s.profileImgBox}>
+                                            <img src={`http://localhost:8080/image/user/profile/${loginUserData?.data.profileImg}`} alt='' /> 
+                                        </div>
+                                        {loginUserData?.data.nickname}
+                                    </span>
+                                </button>
                             </div>
                             <button css={basicbutton} onClick={handleSidebarClose}><FiChevronsLeft /></button>
                         </div>
@@ -61,7 +56,7 @@ function MainSidebar(props) {
                 </div>
                 <div>
                     <div css={s.groupLayout}>
-                        <button css={emptyButton}>
+                        <button css={emptyButton} onClick={handleLogoutButtonOnClick}>
                             <span css={s.authText}>
                                 <BiLogOut /> 로그아웃
                             </span>

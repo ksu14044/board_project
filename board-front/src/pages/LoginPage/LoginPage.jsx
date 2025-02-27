@@ -8,12 +8,14 @@ import { useLoginMutation } from '../../mutations/authMutation';
 import Swal from 'sweetalert2';
 import { setTokenLocalStorage } from '../../configs/axiosConfig';
 import { useUserMeQuery } from '../../queries/userQuery';
+import { useQueryClient } from '@tanstack/react-query';
 
 
 function LoginPage(props) {
     const navigate = useNavigate();
     const loginMutation = useLoginMutation();
-    const loginUser = useUserMeQuery();
+    // const loginUser = useUserMeQuery();
+    const queryClient = useQueryClient();
 
     const [ searchParams, setSearchParams ] = useSearchParams();
    
@@ -47,7 +49,7 @@ function LoginPage(props) {
                 position: "center",
                 showConfirmButton: false,
             });
-            loginUser.refetch();
+            await queryClient.invalidateQueries({queryKey: ["userMeQuery"]});
             navigate("/");
 
         } catch (error) {
