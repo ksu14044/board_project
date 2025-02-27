@@ -4,8 +4,10 @@ import com.korit.boardback.dto.request.ReqAuthEmailDto;
 import com.korit.boardback.dto.request.ReqJoinDto;
 import com.korit.boardback.dto.request.ReqLoginDto;
 import com.korit.boardback.dto.response.RespTokenDto;
+import com.korit.boardback.service.EmailService;
 import com.korit.boardback.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.mail.MessagingException;
 import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,9 @@ public class AuthController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private EmailService emailService;
 
     @Operation(summary = "회원가입", description = "회원가입 설명")
     @PostMapping("/join")
@@ -48,8 +53,8 @@ public class AuthController {
     }
 
     @PostMapping("/email")
-    public ResponseEntity<?> sendAuthMail(@RequestBody ReqAuthEmailDto reqAuthEmailDto) {
-
+    public ResponseEntity<?> sendAuthMail(@RequestBody ReqAuthEmailDto reqAuthEmailDto) throws MessagingException {
+        emailService.sendAuthMail(reqAuthEmailDto.getEmail());
         return ResponseEntity.ok().build();
     }
 
