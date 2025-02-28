@@ -1,43 +1,42 @@
 /**@jsxImportSource @emotion/react */
 import * as s from './style';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { RiCloseCircleFill } from "react-icons/ri";
-import { CgPassword } from "react-icons/cg"
+import { CgMail } from "react-icons/cg"
 import { useMutation } from '@tanstack/react-query';
 import { useUpdatePasswordMutation } from '../../../mutations/accountMutation';
 import Swal from 'sweetalert2';
 
 function ChangeEmailModal({ setOpen }) {
-    const [ EmailValue, setEmailValue ] = useState({
-        newPassword: "",
-        confirmPassword: "",
-    })
-    const passwordMutation = useUpdatePasswordMutation();
+    const [ emailValue, setEmailValue ] = useState("");
+    const [ time, setTime ] = useState(1000 * 60 * 5);
+    const [ isSend, setSend ] = useState(false);
 
-    const handlePasswordInputOnChange = (e) => {
-        setPasswordValue(prev => ({
-            ...prev,
-            [e.target.name]: e.target.value,
-        }))
-    };
+    useEffect(() => {
+        const timer = setInterval(()=> {
+            setTime(prev => prev - 1000);
+        }, 1000);
+        return () => {
+            clearInterval(timer);
+        }
+    }, [isSend]);
 
+    const handleEmailInputOnChange = (e) => {
+        setEmailValue(e.target.value);
+    }
+
+    const handleSendMailOnClick = () => {
+        setTime(1000*60*5);
+        setSend(true);
+    }
+    const handleSetButtonOnClick = () => {
+
+    }
     const handleCloseButtonOnClick = () => {
         setOpen(false);
     }
 
-    const handleSetButtonOnClick = async () => {
-        await passwordMutation.mutateAsync(passwordValue.newPassword);
-        await Swal.fire({
-            titleText: "새로운 비밀번호로 변경되었습니다.",
-            icon: "success",
-            showConfirmButton: false,
-            timer: 1000, 
-            position: "center",
-        });
-        setOpen(false);
 
-
-    }
 
     return (
         <div>
@@ -45,21 +44,26 @@ function ChangeEmailModal({ setOpen }) {
                 <div onClick={handleCloseButtonOnClick}><RiCloseCircleFill /></div>
             </div>
             <div css={s.header}>
-                <div css={s.headerIcon}><CgPassword /></div>
-                <h2 css={s.headerTitle}>Set a password</h2>
-                <p css={s.headerMessage}>비밀번호는 최소 8자 이상의 영문, 숫자, 특수문자 조합을 사용하세요.</p>
+                <div css={s.headerIcon}><CgMail /></div>
+                <h2 css={s.headerTitle}>Set a email address</h2>
+                <p css={s.headerMessage}>변경할 이메일 주소를 입력하세요. 이후 인증 절차를 통해 이메일 변경이 가능합니다.</p>
             </div>
             <div>
                 <div css={s.inputGroup}>
-                    <label>Enter a new password</label>
-                    <input type="password" name='newPassword' value={passwordValue.newPassword} onChange={handlePasswordInputOnChange}/>
+                    <label>Enter a new email</label>
+                    <div css={s.emailInputAndSendButton}>
+                        <input type="email" name='newEmail' value={emailValue} onChange={handleEmailInputOnChange}/>
+                        {
+                            isSend
+                            ?
+                            <span>{time}</span>
+                            :
+                            <button onClick={handleSendMailOnClick} disabled={isSend}>전송</button>
+                        }  
+                    </div>
                 </div>
-                <div css={s.inputGroup}>
-                    <label>Confirm your new password</label>
-                    <input type="password" name='confirmPassword' value={passwordValue.confirmPassword} onChange={handlePasswordInputOnChange}/>
-                </div>
-                <button css={s.setButton} disabled={!passwordValue.newPassword || !passwordValue.confirmPassword || passwordValue.newPassword !== passwordValue.confirmPassword} 
-                onClick={handleSetButtonOnClick}>Set a password</button>
+                <button css={s.setButton} disabled={!emailValue} 
+                onClick={handleSetButtonOnClick}>Set a email address</button>
             </div>
         </div>
     );

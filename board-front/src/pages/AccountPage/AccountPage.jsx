@@ -7,6 +7,7 @@ import { updateProfileImg } from '../../apis/userApi';
 import { useUpdateNicknameMutation, useUpdateProfileImgMutation } from '../../mutations/accountMutation';
 import ReactModal from 'react-modal';
 import PasswordModal from '../../components/auth/PasswordModal/PasswordModal';
+import ChangeEmailModal from '../../components/auth/ChangeEmailModal/ChangeEmailModal';
 
 function AccountPage(props) {
     const loginUser = useUserMeQuery();
@@ -107,7 +108,7 @@ function AccountPage(props) {
                         width: "37rem",
                     }
                 }}
-                children={<PasswordModal setOpen={setEmailModalOpen}/>}
+                children={<ChangeEmailModal setOpen={setEmailModalOpen}/>}
             />
             <ReactModal 
                 isOpen={passwordModalOpen}
