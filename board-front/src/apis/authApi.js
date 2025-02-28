@@ -10,3 +10,8 @@ export const loginApi = async (loginInfo) => {
     
     return await api.post("api/auth/login", loginInfo);
 }
+
+export const sendAuthMailApi = async (username) => {
+
+    return await api.post("api/auth/email", {username});
+}

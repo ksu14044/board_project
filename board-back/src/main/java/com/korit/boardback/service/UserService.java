@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -44,6 +45,10 @@ public class UserService {
     @Autowired
     private EmailService emailService;
 
+    public User getUserByUsername(String username) throws Exception {
+        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("사용자를 찾지 못했습니다."));
+    }
+
     public boolean duplicatedUsername(String username) {
         return userRepository.findByUsername(username).isPresent();
     }
@@ -73,7 +78,7 @@ public class UserService {
                 .build();
         userRoleRepository.save(userRole);
         try{
-            emailService.sendAuthMail(reqJoinDto.getEmail());
+            emailService.sendAuthMail(reqJoinDto.getEmail(), reqJoinDto.getUsername());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -87,7 +92,10 @@ public class UserService {
         if(!bCryptPasswordEncoder.matches(reqLoginDto.getPassword(), foundUser.getPassword())) {
             throw new BadCredentialsException("사용자를 찾을 수 없습니다.");
         }
-
+        // 이메일 인증 여부 확인
+        if(foundUser.getAccountEnabled() == 0) {
+            throw new DisabledException("이메일 인증이 필요합니다.");
+        }
         Date expires = new Date(new Date().getTime() + 1000l * 60 * 60 * 24 * 7);
 
 
