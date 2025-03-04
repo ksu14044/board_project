@@ -8,6 +8,6 @@
         insert into
             board_tb
         values
-            (default, #{category_id}, #{userId}, #{title}, #{content}, 0, now(), now())
+            (default, #{boardCategoryId}, #{userId}, #{title}, #{content}, 0, now(), now())
     </insert>
 </mapper>

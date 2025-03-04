@@ -94,3 +94,23 @@ export const writeButton = css`
     right: 0.6rem;
     top: 0.4rem;
 `;
+
+export const categoryListContainer = css`
+    flex-grow: 1;
+    overflow-y: auto;
+`;
+
+export const categoryItem = css`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+
+    & > button:nth-of-type(2) {
+        opacity: 0;
+    }
+
+    &:hover > button:nth-of-type(2) {
+        opacity: 1;
+    }
+`;

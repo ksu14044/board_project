@@ -26,4 +26,9 @@ public class BoardController {
 
         return ResponseEntity.ok().body(boardService.createBoard(categoryName, principalUser.getUser(), reqWriteBoardDto));
     }
+
+    @GetMapping("/categories")
+    public ResponseEntity<?> getCategories(@AuthenticationPrincipal PrincipalUser principalUser) {
+        return ResponseEntity.ok().body(boardService.getBoardCategoriesByUserId(principalUser.getUser()));
+    }
 }
