@@ -8,9 +8,10 @@ import { mainSidebarIsOpenState } from '../../../atoms/mainSidebar/mainSidebarAt
 import { LuLockKeyhole } from "react-icons/lu";
 import { useNavigate } from 'react-router-dom';
 import { useUserMeQuery } from '../../../queries/userQuery';
-import { BiLogOut } from "react-icons/bi";
+import { BiEdit, BiLogOut } from "react-icons/bi";
 import { setTokenLocalStorage } from '../../../configs/axiosConfig';
 import { useQueryClient } from '@tanstack/react-query';
+import Swal from 'sweetalert2';
 
 function MainSidebar(props) {
     const navigate = useNavigate();
@@ -32,6 +33,20 @@ function MainSidebar(props) {
         navigate("/auth/login");
     }
 
+    const handleWriteOnClick = async () => {
+        const categoryData = await Swal.fire({
+            title: "카테고리명을 입력하세요.",
+            input: "text",
+            inputPlaceholder: "Enter category name",
+            showCancelButton: true,
+            confirmButtonText: "작성하기",
+            cancelButtonText: "취소하기",
+        })
+        if(categoryData.isConfirmed) {
+            navigate(`/board/write/${categoryData.value}`);
+        }
+    }
+
     return (
         <div css={s.layout(isOpen)}>
             <div css={s.container}>
@@ -50,6 +65,33 @@ function MainSidebar(props) {
                             </div>
                             <button css={basicbutton} onClick={handleSidebarClose}><FiChevronsLeft /></button>
                         </div>
+                    </div>
+                    <div css={s.groupLayout}>
+                        <button css={emptyButton}>
+                            <span>
+                                전체 게시글
+                            </span>
+                        </button>
+                    </div>
+                    <div css={s.groupLayout}>
+                        <button css={emptyButton}>
+                            <span>
+                                공지 사항
+                            </span>
+                        </button>
+                    </div>
+                    <div css={s.groupLayout}>
+                        <button css={emptyButton}>
+                            <span css={s.categoryText} >
+                                내가 작성한 글
+                                <span css={s.writeButton}>
+                                    <button css={basicbutton} onClick={handleWriteOnClick}><BiEdit /></button>
+                                </span>
+                            </span>
+                        </button>
+                    </div>
+                    <div>
+
                     </div>
                 </div>
                 <div>

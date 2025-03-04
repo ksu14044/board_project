@@ -24,6 +24,7 @@ export const container = css`
 `;
 
 export const groupLayout = css`
+    position: relative;
     box-sizing: border-box;
     border-radius: 0.7rem;
     padding: 0.6rem;
@@ -82,3 +83,14 @@ export const authText = css`
     }
 `;
 
+export const categoryText = css`
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+`;
+
+export const writeButton = css`
+    position: absolute;
+    right: 0.6rem;
+    top: 0.4rem;
+`;
