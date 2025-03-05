@@ -10,4 +10,34 @@
         values
             (default, #{boardCategoryId}, #{userId}, #{title}, #{content}, 0, now(), now())
     </insert>
+    <select id="selectBoardListAllBySearchOption" resultType="com.korit.boardback.entity.BoardSearch">
+        select
+            bt.board_id as boardId,
+            bt.title,
+            bct.board_category_name as boardCategoryName,
+            ut.profile_img as profileImg,
+            ut.nickname,
+            bt.view_count as viewCount,
+            (select count(*) from board_like_tb where board_id = bt.board_id) as likeCount,
+            bt.created_at as createdAt
+        from
+            board_tb bt
+            inner join board_category_tb bct on (bct.board_category_id = bt.board_category_id)
+            inner join user_tb ut on (ut.user_id = bt.user_id)
+        <where>
+            <if test="searchText != null and searchText != ''">
+                title like concat("%", #{searchText}, "%")
+            </if>
+        </where>
+        order by
+            <choose>
+                <when test="">
+
+                </when>
+                <otherwise>
+
+                </otherwise>
+            </choose>
+    </select>
+
 </mapper>

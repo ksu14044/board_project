@@ -1,14 +1,17 @@
 /**@jsxImportSource @emotion/react */
 import Select from 'react-select';
 import * as s from './style';
-import React from 'react';
+import React, { useState } from 'react';
 import { BiSearch } from 'react-icons/bi';
 import { emptyButton } from '../../styles/buttons';
 import { GrFormView } from 'react-icons/gr';
 import { FcLike } from 'react-icons/fc';
-
+import { GoChevronLeft, GoChevronRight } from "react-icons/go";
+import { useSearchParams } from 'react-router-dom';
 
 function BoardListPage(props) {
+
+    const [ searchParams, setSearchParams ] = useSearchParams();
 
     const orderSelectOptions = [
         {label: "최근 게시글", value: "recent"},
@@ -61,7 +64,7 @@ function BoardListPage(props) {
                         </div>
                         <div css={s.boardWriter}>
                             <div>
-                                <img src="" alt="" />
+                                <img src={`http://localhost:8080/image/user/profile/default.png`} alt="" />
                             </div>
                             <span>nickname</span>
                         </div>
@@ -80,7 +83,15 @@ function BoardListPage(props) {
                 </ul>
             </div>
             <div css={s.footer}>
-                1,2,3,4,5
+                <div css={s.pageNumbers}>
+                    <div><GoChevronLeft /></div>
+                    <div css={s.pageNum(searchParams.get("page") === "1")}><span>1</span></div>
+                    <div css={s.pageNum(searchParams.get("page") === "2")}><span>2</span></div>
+                    <div css={s.pageNum(searchParams.get("page") === "3")}><span>3</span></div>
+                    <div css={s.pageNum(searchParams.get("page") === "4")}><span>4</span></div>
+                    <div css={s.pageNum(searchParams.get("page") === "5")}><span>5</span></div>
+                    <div><GoChevronRight /></div>
+                </div>
             </div>
         </div>
     );
