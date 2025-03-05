@@ -16,4 +16,5 @@ public interface BoardMapper {
             @Param("order") String order,
             @Param("searchText") String searchText
     );
+    int selectBoardCountAllBySearchText(@Param("searchText")String searchText);
 }

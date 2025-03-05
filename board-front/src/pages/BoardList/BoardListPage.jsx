@@ -12,6 +12,10 @@ import { useSearchParams } from 'react-router-dom';
 function BoardListPage(props) {
 
     const [ searchParams, setSearchParams ] = useSearchParams();
+    const page = parseInt(searchParams.get("page") || "1");
+    const order = searchParams.get("order") || "recent";
+    const searchText = searchParams.get("searchText") || "";
+
 
     const orderSelectOptions = [
         {label: "최근 게시글", value: "recent"},
@@ -85,11 +89,11 @@ function BoardListPage(props) {
             <div css={s.footer}>
                 <div css={s.pageNumbers}>
                     <div><GoChevronLeft /></div>
-                    <div css={s.pageNum(searchParams.get("page") === "1")}><span>1</span></div>
-                    <div css={s.pageNum(searchParams.get("page") === "2")}><span>2</span></div>
-                    <div css={s.pageNum(searchParams.get("page") === "3")}><span>3</span></div>
-                    <div css={s.pageNum(searchParams.get("page") === "4")}><span>4</span></div>
-                    <div css={s.pageNum(searchParams.get("page") === "5")}><span>5</span></div>
+                    <div css={s.pageNum(page === 1)}><span>1</span></div>
+                    <div css={s.pageNum(page === 2)}><span>2</span></div>
+                    <div css={s.pageNum(page === 3)}><span>3</span></div>
+                    <div css={s.pageNum(page === 4)}><span>4</span></div>
+                    <div css={s.pageNum(page === 5)}><span>5</span></div>
                     <div><GoChevronRight /></div>
                 </div>
             </div>

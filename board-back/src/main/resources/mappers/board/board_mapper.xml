@@ -31,13 +31,36 @@
         </where>
         order by
             <choose>
-                <when test="">
-
+                <when test="order =='oldest'">
+                    boardId asc,
                 </when>
-                <otherwise>
-
-                </otherwise>
+                <when test="order =='viewsDesc'">
+                    viewCount desc,
+                </when>
+                <when test="order =='viewAsc'">
+                    viewCount asc,
+                </when>
+                <when test="order =='likesDesc'">
+                    likeCount desc,
+                </when>
+                <when test="order =='likesAsc'">
+                    likeCount asc,
+                </when>
             </choose>
+            boardId desc
+        limit #{startIndex}, #{limitCount}
     </select>
+    <select id="selectBoardCountAllBySearchText" resultType="java.lang.Integer">
+        select
+            count(*)
+        from
+            board_tb
+        <where>
+            <if test="searchText != null and searchText != ''">
+                title like concat("%", #{searchText}, "%")
+            </if>
+        </where>
+    </select>
+
 
 </mapper>
