@@ -16,8 +16,6 @@ function BoardWritePage(props) {
     const createBoardMutation = useCreateBoardMutation();
 
     useEffect(() => {
-        console.log(params.categoryName);
-        console.log(quillContent);
     }, [quillContent]);
 
     const containerRef = useRef();
