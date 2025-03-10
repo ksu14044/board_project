@@ -1,6 +1,6 @@
 import { css } from "@emotion/react";
 
-export const layout = (isOpen) =>  css`
+export const layout = (isOpen) => css`
     position: relative;
     transition: all 0.5s ease-in-out;
     box-sizing: border-box;
@@ -52,12 +52,13 @@ export const profileImgBox = css`
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-right: 1rem;
     border-radius: 0.5rem;
     width: 3rem;
     height: 3rem;
     background-color: #ffffff;
     overflow: hidden;
-    margin-right: 1rem;
+
     & > img {
         width: 100%;
     }
@@ -66,14 +67,11 @@ export const profileImgBox = css`
 export const authText = css`
     display: inline-flex;
     align-items: center;
-    
     width: 20rem;
-    
 
     & > svg {
         margin-right: 0.5rem;
     }
-
     & > span {
         width: 80%;
         overflow: hidden;

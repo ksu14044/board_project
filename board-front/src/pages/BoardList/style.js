@@ -5,15 +5,14 @@ export const container = css`
     flex-direction: column;
     width: 100%;
     height: 100%;
-
 `;
 
 export const header = css`
     display: flex;
     justify-content: space-between;
-    padding: 1rem;
-    border-bottom: 0.1rem solid #dbdbdb;
     align-items: center;
+    border-bottom: 0.1rem solid #dbdbdb;
+    padding: 1rem;
 `;
 
 export const title = css`
@@ -25,11 +24,8 @@ export const title = css`
     }
 `;
 
-
-
 export const searchItems = css`
     display: flex;
-
 `;
 
 export const searchInputBox = css`
@@ -38,32 +34,31 @@ export const searchInputBox = css`
     height: 3rem;
 
     & > input {
-        height: 100%;
         box-sizing: border-box;
-        border: 0.1rem solid #dbdbdb;
-        width: 20rem;
-        padding: 0 5rem 0 1rem;
-        border-radius: 0.4rem;
         outline-color: #2684ff;
-        font-size: 1.3rem;
+        border: 0.1rem solid #dbdbdb;
+        border-radius: 0.4rem;
+        padding: 0 4rem 0 1rem;
+        width: 20rem;
+        height: 100%;
+        font-size: 1rem;
     }
 
     & > button {
         position: absolute;
-        top: 50%;
         transform: translateY(-50%);
-        right: 0rem;
+        top: 50%;
+        right: 0;
     }
 `;
 
 export const main = css`
     padding: 1rem;
-
 `;
 
 export const boardListContainer = css`
-    padding: 0;
     margin: 0;
+    padding: 0;
     list-style-type: none;
 
     & > li:nth-of-type(1) {
@@ -72,39 +67,36 @@ export const boardListContainer = css`
 
     & > li {
         display: flex;
-        height: 3rem;
         align-items: center;
+        height: 3rem;
         cursor: default;
-
+        
         &:not(:nth-of-type(1)):hover {
             border-radius: 0.7rem;
             background-color: #eeeeee;
             cursor: pointer;
         }
 
-        & > div{
-            font-size: 1.4rem;
+        & > div {
             box-sizing: border-box;
-            
+            font-size: 1.4rem;
         }
-
-        & > div:not(& > div:nth-last-of-type(1)){
+        & > div:not(& > div:nth-last-of-type(1)) {
             margin-right: 1rem;
             border-right: 0.1rem solid #dbdbdb;
         }
-        
         & > div:nth-of-type(1) {
-            width: 8rem;
             padding-left: 1rem;
+            width: 8rem;
         }
         & > div:nth-of-type(2) {
             flex-grow: 1;
             display: block;
             width: 13.4rem;
+            padding-right: 1rem;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            padding-right: 1rem;
         }
         & > div:nth-of-type(3) {
             width: 15rem;
@@ -137,7 +129,13 @@ export const boardWriter = css`
     }
 
     & > span {
+        display: block;
+        width: 70%;
+        padding-right: 1rem;
         margin-bottom: 0.1rem;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
     }
 `;
 
@@ -154,15 +152,16 @@ export const boardCounts = css`
         }
 
         & > span {
-            position: absolute;
             display: none;
+            position: absolute;
             transform: translateX(-50%);
             left: 50%;
+            z-index: 2;
             border-radius: 0.5rem;
-            background-color: #fafafa;
             padding: 0.3rem 0.5rem;
+            background-color: #000000c6;
+            color: #ffffff;
             font-size: 1.4rem;
-            
         }
     }
 `;
@@ -175,21 +174,26 @@ export const pageNumbers = css`
     display: flex;
     width: 25rem;
 
-    & > div {
+    & > button {
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 2.5rem;
         box-sizing: border-box;
+        margin-right: 0.5rem;
         border: 0.1rem solid #dbdbdb;
         border-radius: 0.5rem;
         width: 2.5rem;
-        margin-right: 0.5rem;
+        height: 2.5rem;
         font-weight: 600;
         font-size: 1.2rem;
         cursor: pointer;
-        
+        background-color: #ffffff;
+
         &:hover {
+            background-color: #eeeeee;
+        }
+
+        &:disabled {
             background-color: #fafafa;
         }
 
@@ -200,6 +204,5 @@ export const pageNumbers = css`
 `;
 
 export const pageNum = (isSelect) => css`
-    background-color: ${isSelect ? "#eeeeee" : "#ffffff" };
+    background-color: ${isSelect ? "#eeeeee" : "#ffffff"} !important;
 `;
-

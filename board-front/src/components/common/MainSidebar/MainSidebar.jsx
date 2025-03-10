@@ -2,24 +2,24 @@
 import * as s from './style';
 import React from 'react';
 import { FiChevronsLeft } from "react-icons/fi";
-import { basicbutton, emptyButton } from '../../../styles/buttons';
 import { useRecoilState } from 'recoil';
 import { mainSidebarIsOpenState } from '../../../atoms/mainSidebar/mainSidebarAtom';
 import { LuLockKeyhole } from "react-icons/lu";
-import { useNavigate } from 'react-router-dom';
 import { useUserMeQuery } from '../../../queries/userQuery';
+import { useNavigate } from 'react-router-dom';
 import { BiEdit, BiLogOut } from "react-icons/bi";
 import { setTokenLocalStorage } from '../../../configs/axiosConfig';
 import { useQueryClient } from '@tanstack/react-query';
 import Swal from 'sweetalert2';
-import { useGetCategoryies } from '../../../queries/boardQuery';
+import { useGetCategories } from '../../../queries/boardQuery';
+import { basicbutton, emptyButton } from '../../../styles/buttons';
 
 function MainSidebar(props) {
     const navigate = useNavigate();
     const [ isOpen, setOpen ] = useRecoilState(mainSidebarIsOpenState);
     const queryClient = useQueryClient();
     const loginUserData = queryClient.getQueryData(["userMeQuery"]);
-    const categories = useGetCategoryies();
+    const categories = useGetCategories();
 
     const handleSidebarClose = () => {
         setOpen(false);
@@ -36,16 +36,16 @@ function MainSidebar(props) {
     }
 
     const handleWriteOnClick = async (categoryName) => {
-        if(!categoryName){
+        if(!categoryName) {
             const categoryData = await Swal.fire({
-                title: "카테고리명을 입력하세요.",
+                title: "카테고리명을 입력하세요",
                 input: "text",
-                inputPlaceholder: "Enter category name",
+                inputPlaceholder: "Enter category name...",
                 showCancelButton: true,
                 confirmButtonText: "작성하기",
-                cancelButtonText: "취소하기",
+                cancelButtonText: "취소하기"
             });
-            if(categoryData.isConfirmed){
+            if(categoryData.isConfirmed) {
                 categoryName = categoryData.value;
             } else {
                 return;
@@ -64,7 +64,7 @@ function MainSidebar(props) {
                                 <button css={emptyButton} onClick={handleAccountButtonOnClick}>
                                     <span css={s.authText}>
                                         <div css={s.profileImgBox}>
-                                            <img src={`http://localhost:8080/image/user/profile/${loginUserData?.data.profileImg}`} alt='' /> 
+                                            <img src={`http://localhost:8080/image/user/profile/${loginUserData?.data.profileImg}`} alt="" />
                                         </div>
                                         <span>{loginUserData?.data.nickname}</span>
                                     </span>
@@ -83,7 +83,7 @@ function MainSidebar(props) {
                     <div css={s.groupLayout}>
                         <button css={emptyButton}>
                             <span>
-                                공지 사항
+                                공지사항
                             </span>
                         </button>
                     </div>
@@ -92,12 +92,12 @@ function MainSidebar(props) {
                             <button css={emptyButton}>내가 작성한 글({categories.isLoading || categories.data.data.reduce((prev, category) => {return prev + category.boardCount}, 0)})</button>
                             <button css={basicbutton} onClick={() => handleWriteOnClick(null)}><BiEdit /></button>
                         </div>
-                    </div>        
+                    </div>
                 </div>
                 <div css={s.categoryListContainer}>
                     {
                         categories.isLoading ||
-                        categories.data.data.map(category => 
+                        categories.data.data.map(category =>
                             <div key={category.boardCategoryId} css={s.groupLayout}>
                                 <div css={s.categoryItem}>
                                     <button css={emptyButton}>{category.boardCategoryName}({category.boardCount})</button>
@@ -106,7 +106,6 @@ function MainSidebar(props) {
                             </div>
                         )
                     }
-                    
                 </div>
                 <div>
                     <div css={s.groupLayout}>
